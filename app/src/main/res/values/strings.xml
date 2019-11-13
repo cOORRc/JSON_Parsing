@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">recyclerV</string>
+<!--    <string name="url">https://api.github.com/search/users?q=dreamt</string>-->
 </resources>

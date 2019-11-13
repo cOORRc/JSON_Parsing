@@ -1,5 +1,7 @@
 package com.recyclerv;
 
+import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,13 +11,55 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.squareup.picasso.Picasso;
+
 import java.util.ArrayList;
 
 public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleViewHolder> {
-
+    private Context mContext;
     private ArrayList<ExampleItem> mExampleList;
 
-    public static class ExampleViewHolder extends RecyclerView.ViewHolder{
+
+    public ExampleAdapter(Context context,ArrayList<ExampleItem> exampleList){
+        mContext = context;
+        mExampleList = exampleList;
+    }
+
+    @NonNull
+    @Override
+    public ExampleViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View v = LayoutInflater.from(mContext).inflate
+                (R.layout.activity_example_item,parent,false);
+        return new ExampleViewHolder(v);
+
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull ExampleViewHolder holder, int position) {
+        ExampleItem currentItem = mExampleList.get(position);
+
+        //String name = ExampleItem.methods for ExampleItem(); เมธอดที่เราจะเอาข้อมูลไปเก็บไว้
+        String imageUrl = currentItem.getImageResource();
+        String name = currentItem.getText1();
+        int id = currentItem.getText2();
+
+        // เซ็ตข้อมูล
+        //holder.mImageView.setImageResource(currentItem.getImageResource());
+        holder.mTextView1.setText(name);
+        holder.mTextView2.setText("ID: "+id);
+        /** Picasso.with(mContext) **/
+        Picasso.get().load(imageUrl).placeholder(R.drawable.ic_launcher_background).fit().centerInside().into(holder.mImageView);
+
+
+    }
+
+    @Override
+    public int getItemCount() {
+        return mExampleList.size();
+    }
+
+
+    public class ExampleViewHolder extends RecyclerView.ViewHolder{
         public ImageView mImageView;
         public TextView mTextView1,mTextView2;
 
@@ -26,30 +70,5 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
             mTextView1 = itemView.findViewById(R.id.textView);
             mTextView2 = itemView.findViewById(R.id.textView2);
         }
-    }
-    public ExampleAdapter(ArrayList<ExampleItem> exampleList){
-        mExampleList = exampleList;
-    }
-
-    @NonNull
-    @Override
-    public ExampleViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.activity_example_item,parent,false);
-        ExampleViewHolder evh = new ExampleViewHolder(v);
-        return evh;
-    }
-
-    @Override
-    public void onBindViewHolder(@NonNull ExampleViewHolder holder, int position) {
-        ExampleItem currentItem = mExampleList.get(position);
-        holder.mImageView.setImageResource(currentItem.getImageResource());
-        holder.mTextView1.setText(currentItem.getText1());
-        holder.mTextView2.setText(currentItem.getText2());
-
-    }
-
-    @Override
-    public int getItemCount() {
-        return mExampleList.size();
     }
 }
